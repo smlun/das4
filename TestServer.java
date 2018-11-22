@@ -25,10 +25,10 @@ public class TestServer {
             unexportObject(rmiRegistry, true);
             System.out.println("Server stopped");
         }
-        
+
         public String sayHello() {
             return "Hello world";
-        }   
+        }
     }
     public static void main(String[] args) throws Exception {
         ServerImpl server = new ServerImpl();
