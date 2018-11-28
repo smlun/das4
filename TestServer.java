@@ -3,6 +3,10 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.io.*;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.File;
 
 public class TestServer {
 
@@ -29,7 +33,16 @@ public class TestServer {
         public String sayHello() {
             return "Hello world";
         }
+
+        public OutputStream getOutputStream(File f) throws IOException {
+            return new RMIOutputStream(new RMIOutputStreamImpl(new FileOutputStream(f)));
+        }
+
+        public InputStream getInputStream(File f) throws IOException {
+            return new RMIInputStream(new RMIInputStreamImpl(new FileInputStream(f)));
+        }
     }
+
     public static void main(String[] args) throws Exception {
         ServerImpl server = new ServerImpl();
         server.start();
