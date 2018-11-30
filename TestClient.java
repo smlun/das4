@@ -6,12 +6,13 @@ import java.io.*;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.File;
+import java.util.Scanner;
 
 public class TestClient {
     final public static int BUF_SIZE = 1024 * 64;
     
     public static void copy(InputStream in, OutputStream out) throws IOException {
-        System.out.println("using byte[] read/write");
+        System.out.println("Streaming file...");
         byte[] b = new byte[BUF_SIZE];
         int len;
         while ((len = in.read(b)) >= 0) {
@@ -21,17 +22,21 @@ public class TestClient {
         out.close();
     }
     
-    public static void upload(Server server, File src, 
-            File dest) throws IOException {
+    public static void upload(Server server, File src, File dest) throws IOException {
         copy (new FileInputStream(src), 
         server.getOutputStream(dest));
     }
 
-    public static void download(Server server, File src, 
-            File dest) throws IOException {
+    public static void download(Server server, File src, File dest) throws IOException {
         copy (server.getInputStream(src), 
         new FileOutputStream(dest));
     }
+
+    // public void sendMessageToClient(String message) throws RemoteException {
+    //     System.out.println(message); 
+    // }
+
+    // public void broadcastMessage(String clientname) throws RemoteException {}
 
     public static void main(String[] args) throws Exception {
         try 
@@ -39,21 +44,31 @@ public class TestClient {
             String url = "rmi://localhost/server";
             Server server = (Server) Naming.lookup(url);
 
-            System.out.println("Server says: " + server.sayHello());
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter The Name : ");
+            String clientName = scanner.nextLine();
+            System.out.println("\nConnecting To Server...\n");
 
-            File testFile = new File("test.txt");
-            long len = testFile.length();
+            boolean check = server.addClient(server, clientName);
+
+            if (check == true) 
+            {
+                File testFile = new File("test.mkv");
+                long len = testFile.length();
         
-            long t;
-            t = System.currentTimeMillis();
-            download(server, testFile, new File("download.txt"));
-            t = (System.currentTimeMillis() - t) / 1000;
-            System.out.println("download: " + (len / t / 1000000d) + " MB/s");
+                long t;
+                t = System.currentTimeMillis();
+                download(server, testFile, new File("download.mkv"));
+                server.broadcastMessage(clientName);
+                // t = (System.currentTimeMillis() - t) / 1000;
+                // System.out.println("download: " + (len / t / 1000000d) + " MB/s");
         
-            t = System.currentTimeMillis();
-            upload(server, new File("download.txt"), new File("upload.txt"));
-            t = (System.currentTimeMillis() - t) / 1000;
-            System.out.println("upload: " + (len / t / 1000000d) + " MB/s");
+                //t = System.currentTimeMillis();
+                //upload(server, new File("download.txt"), new File("upload.txt"));
+                // t = (System.currentTimeMillis() - t) / 1000;
+                // System.out.println("upload: " + (len / t / 1000000d) + " MB/s");
+            }
+            
         }
         // Catch the exceptions that may occur � bad URL, Remote exception
         // Not bound exception or the arithmetic exception that may occur in

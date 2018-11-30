@@ -7,14 +7,25 @@ import java.io.*;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.File;
+import java.util.ArrayList;
 
 public class TestServer {
 
     public static class ServerImpl extends UnicastRemoteObject implements Server {
         Registry rmiRegistry;
+        private ArrayList<Server> clientList;
 
         public ServerImpl() throws RemoteException {
             super();
+            clientList =  new ArrayList<Server>();
+        }
+
+        public boolean addClient(Server server, String clientname) throws RemoteException { 
+            boolean check = false;
+            this.clientList.add(server);
+            System.out.println(clientname + " is registered!");           
+            check = true;
+            return check;         
         }
 
         public void start() throws Exception {
@@ -41,12 +52,22 @@ public class TestServer {
         public InputStream getInputStream(File f) throws IOException {
             return new RMIInputStream(new RMIInputStreamImpl(new FileInputStream(f)));
         }
+
+        public synchronized void broadcastMessage(String clientname) throws RemoteException {
+            for(int i=0; i<clientList.size(); i++) {
+                clientList.get(i).sendMessageToClient(clientname.toUpperCase() + " has completed downloading");
+            }
+        }
+ 
+        public String sendMessageToClient(String message) throws RemoteException {
+            return message; 
+        }
     }
 
     public static void main(String[] args) throws Exception {
         ServerImpl server = new ServerImpl();
         server.start();
-        Thread.sleep(5 * 60 * 1000); // run for 5 minutes
-        server.stop();
+        // Thread.sleep(5 * 60 * 1000); // run for 5 minutes
+        // server.stop();
     }
 }
