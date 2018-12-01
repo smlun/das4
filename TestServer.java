@@ -14,18 +14,19 @@ public class TestServer {
     public static class ServerImpl extends UnicastRemoteObject implements Server {
         Registry rmiRegistry;
         private ArrayList<Server> clientList;
+        private String completedClient;
 
         public ServerImpl() throws RemoteException {
             super();
             clientList =  new ArrayList<Server>();
         }
 
-        public boolean addClient(Server server, String clientname) throws RemoteException { 
+        public boolean addClient(Server server, String clientName) throws RemoteException {
             boolean check = false;
             this.clientList.add(server);
-            System.out.println(clientname + " is registered!");           
+            System.out.println(clientName + " is registered!");
             check = true;
-            return check;         
+            return check;
         }
 
         public void start() throws Exception {
@@ -53,14 +54,15 @@ public class TestServer {
             return new RMIInputStream(new RMIInputStreamImpl(new FileInputStream(f)));
         }
 
-        public synchronized void broadcastMessage(String clientname) throws RemoteException {
-            for(int i=0; i<clientList.size(); i++) {
-                clientList.get(i).sendMessageToClient(clientname.toUpperCase() + " has completed downloading");
-            }
+        public synchronized void setCompletedName(String clientName) throws RemoteException {
+            // for(int i=0; i<clientList.size(); i++) {
+              // System.out.println(clientName.toUpperCase() + " has completed downloading");
+            // }
+            completedClient = clientName;
         }
- 
-        public String sendMessageToClient(String message) throws RemoteException {
-            return message; 
+
+        public synchronized String getCompletedName() throws RemoteException {
+            return completedClient;
         }
     }
 
@@ -69,5 +71,9 @@ public class TestServer {
         server.start();
         // Thread.sleep(5 * 60 * 1000); // run for 5 minutes
         // server.stop();
+
+        while(server.getCompletedName() == null)
+        {}
+        System.out.println(server.getCompletedName() + " has completed downloading!");
     }
 }
