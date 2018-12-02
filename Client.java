@@ -19,7 +19,6 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
     private String ClientName;
     private String ClientIP;
     private ArrayList<String> ipList;
-    private String defaultServer = "localhost";
     boolean chkExit = true;
     boolean chkLog = false;
  
@@ -66,6 +65,27 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
 
     public void tryReconnect() {
         System.out.println(Arrays.toString(this.ipList.toArray()));
+        String url = this.ipList.get(0);
+        try {
+            connect(url);
+        }
+        catch (MalformedURLException murle) {
+            System.out.println("MalformedURLException");
+            System.out.println(murle);
+        }
+        catch (RemoteException re) {
+            System.out.println("RemoteException");
+            System.out.println(re);
+        }
+        catch (NotBoundException ne) {
+            System.out.println("NotBoundException");
+            System.out.println(ne);
+        }
+        catch (UnknownHostException ue) {
+            System.out.println("UnknownHostException");
+            System.out.println(ue);
+        }
+        this.ipList.remove(0);
     }
 
     public void run() {
@@ -104,8 +124,8 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
             } 
         } 
     }
-    
-    public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException, UnknownHostException {
+
+    public static void connect(String url) throws MalformedURLException, RemoteException, NotBoundException, UnknownHostException {
         Scanner scanner = new Scanner(System.in);
         String clientName = "";
         String clientIP = "";
@@ -116,10 +136,14 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
         InetAddress localhost = InetAddress.getLocalHost();
         clientIP = localhost.getHostAddress().trim();
         System.out.println("\nConnecting To Server...\n");
-
-        ServerInterface serverinterface = (ServerInterface)Naming.lookup("rmi://localhost/RMIServer");
-        FileInterface fInterface = (FileInterface)Naming.lookup("rmi://localhost/RMIServer");
-        new Thread(new Client(serverinterface , clientName, clientIP, fInterface)).start();
         
+        ServerInterface serverinterface = (ServerInterface)Naming.lookup("rmi://" + url + "/RMIServer");
+        FileInterface fInterface = (FileInterface)Naming.lookup("rmi://" + url + "/RMIServer");
+        new Thread(new Client(serverinterface , clientName, clientIP, fInterface)).start(); 
+    }
+    
+    public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException, UnknownHostException {
+        String url = "localhost";
+        connect(url);
     }
 }
