@@ -19,6 +19,7 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
     private String ClientName;
     private String ClientIP;
     private ArrayList<String> ipList;
+    private String defaultServer = "localhost";
     boolean chkExit = true;
     boolean chkLog = false;
  
@@ -55,13 +56,16 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
     public void sendMessageToClient(String message, String oip) throws RemoteException {
         System.out.println(message);
         this.ipList.add(oip);
-        System.out.println(Arrays.toString(this.ipList.toArray()));
     }
  
     public void broadcastMessage(String clientname, String clientip) throws RemoteException {}
  
     public boolean checkClientCredintials(ServerInterface serverinterface ,String clientname, String clientip) throws RemoteException {
         return true;
+    }
+
+    public void tryReconnect() {
+        System.out.println(Arrays.toString(this.ipList.toArray()));
     }
 
     public void run() {
@@ -89,8 +93,10 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
                 System.out.println(murle);
             }
             catch (RemoteException re) {
-                System.out.println("RemoteException");
-                System.out.println(re);
+                System.out.println("\nUnable to reach server...\n");
+                System.out.println("Attempting to connect the next available server..");
+                tryReconnect();
+                // System.out.println(re);
             }
             catch (IOException nbe) {
                 System.out.println("NotBoundException");
@@ -106,21 +112,14 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
           
         System.out.print("Enter The Name : ");
         clientName = scanner.nextLine();
-
-        try {
-            InetAddress localhost = InetAddress.getLocalHost();
-            clientIP = localhost.getHostAddress().trim();
-            throw new UnknownHostException("UnknownHostException");
-        }
-        catch (UnknownHostException uhe) {
-            System.out.println(uhe);
-        }
         
+        InetAddress localhost = InetAddress.getLocalHost();
+        clientIP = localhost.getHostAddress().trim();
         System.out.println("\nConnecting To Server...\n");
 
         ServerInterface serverinterface = (ServerInterface)Naming.lookup("rmi://localhost/RMIServer");
         FileInterface fInterface = (FileInterface)Naming.lookup("rmi://localhost/RMIServer");
         new Thread(new Client(serverinterface , clientName, clientIP, fInterface)).start();
+        
     }
- 
 }
