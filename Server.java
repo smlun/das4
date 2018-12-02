@@ -1,14 +1,48 @@
 import java.rmi.*;
+import java.rmi.server.UnicastRemoteObject;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.io.*;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.File;
 
-public interface Server extends Remote {
-    public String sayHello() throws RemoteException;
-    public OutputStream getOutputStream(File f) throws IOException;      
-    public InputStream getInputStream(File f) throws IOException;    
-    public boolean addClient(Server serveri, String clientname) throws RemoteException;
-    public void broadcastMessage(String name) throws RemoteException;
-    public String sendMessageToClient(String message) throws RemoteException; 
+public class Server extends UnicastRemoteObject implements ServerInterface, FileInterface {
+    private static final long serialVersionUID = 1L;
+    private ArrayList<ServerInterface> clientList;
+ 
+    protected Server() throws RemoteException {
+        clientList = new ArrayList<ServerInterface>();
+    }
+
+    public synchronized boolean checkClientCredintials(ServerInterface serverinterface, String clientname, String clientip) throws RemoteException {
+        boolean chkLog = false;  
+        if (clientname != "") {
+            chkLog = true;
+            this.clientList.add(serverinterface);
+            System.out.println(clientname + " (" + clientip + ")" + " has registered!"); 
+        }
+        return chkLog;
+    }
+ 
+    public synchronized void broadcastMessage(String clientname, String clientip) throws RemoteException {
+        for(int i=0; i<clientList.size(); i++) {
+            clientList.get(i).sendMessageToClient(clientname.toUpperCase() + " has completed downloading file", clientip);
+        }
+    }
+ 
+    public synchronized void sendMessageToClient(String message, String ip) throws RemoteException{}
+
+    public OutputStream getOutputStream(File f) throws IOException {
+        return new RMIOutputStream(new RMIOutputStreamImpl(new FileOutputStream(f)));
+    }
+
+    public InputStream getInputStream(File f) throws IOException {
+        return new RMIInputStream(new RMIInputStreamImpl(new FileInputStream(f)));
+    }
+
+    public static void main(String[] arg) throws RemoteException, MalformedURLException {
+        Naming.rebind("RMIServer", new Server());
+        System.out.println("Server started...");
+    }
 }

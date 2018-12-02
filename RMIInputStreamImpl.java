@@ -9,7 +9,7 @@ public class RMIInputStreamImpl implements RMIInputStreamInterf {
 
     public RMIInputStreamImpl(InputStream in) throws IOException {
         this.in = in;
-        UnicastRemoteObject.exportObject(this, 1099);
+        UnicastRemoteObject.exportObject(this, 1100);
     }
 
     public void close() throws IOException, RemoteException {
