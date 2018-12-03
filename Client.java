@@ -121,8 +121,8 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
                 System.out.println("Successfully Connected To Server");
                 
                 File testFile = new File("test.mkv");
-                long len = testFile.length();
-    
+                long len = fileServer.getFilelength();
+                
                 download(fileServer, testFile, new File("test.mkv"), len);
                 System.out.println("\nStream Completed");
 

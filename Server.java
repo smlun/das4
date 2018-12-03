@@ -41,6 +41,11 @@ public class Server extends UnicastRemoteObject implements ServerInterface, File
         return new RMIInputStream(new RMIInputStreamImpl(new FileInputStream(f)));
     }
 
+    public long getFilelength() {
+        File testFile = new File("test.mkv");
+        return testFile.length();
+    }
+
     public static void main(String[] arg) throws RemoteException, MalformedURLException {
         Naming.rebind("RMIServer", new Server());
         System.out.println("Server started...");
