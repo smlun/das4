@@ -20,13 +20,11 @@ public class RMIInputStreamImpl implements RMIInputStreamInterf {
         return in.read();
     }
 
-    public byte[] readBytes(int len) throws IOException, 
-            RemoteException {
+    public byte[] readBytes(int len) throws IOException, RemoteException {
         if (b == null || b.length != len)
             b = new byte[len];
             
         int len2 = in.read(b);
-        //if (len2 &lt; 0)
         if (len2 < 0)
             return null; // EOF reached
         

@@ -5,8 +5,7 @@ public class RMIOutputStreamImpl implements RMIOutputStreamInterf {
 
     private OutputStream out;
     
-    public RMIOutputStreamImpl(OutputStream out) throws 
-            IOException {
+    public RMIOutputStreamImpl(OutputStream out) throws IOException {
         this.out = out;
         UnicastRemoteObject.exportObject(this, 1100);
     }
@@ -15,8 +14,7 @@ public class RMIOutputStreamImpl implements RMIOutputStreamInterf {
         out.write(b);
     }
 
-    public void write(byte[] b, int off, int len) throws 
-            IOException {
+    public void write(byte[] b, int off, int len) throws IOException {
         out.write(b, off, len);
     }
 

@@ -1,7 +1,6 @@
 import java.io.*;
 
-public class RMIOutputStream extends OutputStream implements 
-        Serializable {
+public class RMIOutputStream extends OutputStream implements Serializable {
 
     private RMIOutputStreamInterf out;
     
@@ -13,8 +12,7 @@ public class RMIOutputStream extends OutputStream implements
         out.write(b);
     }
 
-    public void write(byte[] b, int off, int len) throws 
-            IOException {
+    public void write(byte[] b, int off, int len) throws IOException {
         out.write(b, off, len);
     }
     

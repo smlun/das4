@@ -15,19 +15,19 @@ public class Server extends UnicastRemoteObject implements ServerInterface, File
         clientList = new ArrayList<ServerInterface>();
     }
 
-    public synchronized boolean checkClientCredintials(ServerInterface serverinterface, String clientname, String clientip) throws RemoteException {
+    public synchronized boolean clientDetails(ServerInterface serverinterface, String clientip) throws RemoteException {
         boolean chkLog = false;  
-        if (clientname != "") {
+        if (clientip != "") {
             chkLog = true;
             this.clientList.add(serverinterface);
-            System.out.println(clientname + " (" + clientip + ")" + " has registered!"); 
+            System.out.println(clientip + " has registered!"); 
         }
         return chkLog;
     }
  
-    public synchronized void broadcastMessage(String clientname, String clientip) throws RemoteException {
+    public synchronized void broadcastMessage(String clientip) throws RemoteException {
         for(int i=0; i<clientList.size(); i++) {
-            clientList.get(i).sendMessageToClient(clientname.toUpperCase() + " has completed downloading file", clientip);
+            clientList.get(i).sendMessageToClient(clientip + " has completed downloading file", clientip);
         }
     }
  

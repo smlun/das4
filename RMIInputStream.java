@@ -1,7 +1,6 @@
 import java.io.*;
 
-public class RMIInputStream extends InputStream implements 
-        Serializable {
+public class RMIInputStream extends InputStream implements Serializable {
 
     RMIInputStreamInterf in;
     
