@@ -63,7 +63,6 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
     
         bar.append("]   " + percent + "%     ");
         System.out.print("\r" + bar.toString());
-        System.out.println("\n");
     }
     
     public static void upload(FileInterface finterface, File src, File dest, long len) throws IOException {
@@ -75,6 +74,7 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
     }
 
     public void sendMessageToClient(String message, String oip) throws RemoteException {
+        System.out.println("\n");
         System.out.println(message);
         this.ipList.add(oip);
     }
