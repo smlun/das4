@@ -122,7 +122,7 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
                 
                 File testFile = new File("test.mkv");
                 long len = fileServer.getFilelength();
-                
+
                 download(fileServer, testFile, new File("test.mkv"), len);
                 System.out.println("\nStream Completed");
 
@@ -160,7 +160,7 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
     }
     
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException, UnknownHostException {
-        String url = "localhost";
+        String url = "172.17.192.51";
         connect(url);
     }
 }

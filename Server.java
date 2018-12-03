@@ -27,7 +27,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface, File
  
     public synchronized void broadcastMessage(String clientip) throws RemoteException {
         for(int i=0; i<clientList.size(); i++) {
-            clientList.get(i).sendMessageToClient(clientip + " has completed downloading file", clientip);
+            clientList.get(i).sendMessageToClient("\n" + clientip + " has completed downloading file", clientip);
         }
     }
  
