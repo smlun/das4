@@ -63,6 +63,7 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
     
         bar.append("]   " + percent + "%     ");
         System.out.print("\r" + bar.toString());
+        System.out.println("\n");
     }
     
     public static void upload(FileInterface finterface, File src, File dest, long len) throws IOException {
@@ -124,7 +125,7 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
                 long len = fileServer.getFilelength();
 
                 download(fileServer, testFile, new File("test.mkv"), len);
-                System.out.println("\nStream Completed");
+                System.out.println("\nStream Completed!");
 
                 if (chkExit == true) {
                     server.broadcastMessage(ClientIP);
@@ -136,7 +137,7 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
                 System.out.println(murle);
             }
             catch (RemoteException re) {
-                System.out.println("\nUnable to reach server...\n");
+                System.out.println("\n\nUnable to reach server...\n");
                 System.out.println("Attempting to connect the next available server..");
                 tryReconnect();
             }
