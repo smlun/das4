@@ -2,12 +2,12 @@
 ## SIT4024-1 Coursework
 
 ### For the designated server,
-> Modify **Client.java**, Line Number **164**:
-> 
+> Modify **Client.java**, Line Number **159**:
+>
 > ```java
 > String url = "DESIGNATED_SERVER_IP_ADDRESS";
 > ```
-> 
+>
 > Replace DESIGNATED_SERVER_IP_ADDRESS with the exact I.P. address of the designated server.
 
 ### Instructions to start all clients
