@@ -4,12 +4,12 @@ import java.rmi.server.UnicastRemoteObject;
 public class RMIOutputStreamImpl implements RMIOutputStreamInterf {
 
     private OutputStream out;
-    
+
     public RMIOutputStreamImpl(OutputStream out) throws IOException {
         this.out = out;
         UnicastRemoteObject.exportObject(this, 1100);
     }
-    
+
     public void write(int b) throws IOException {
         out.write(b);
     }

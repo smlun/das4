@@ -3,11 +3,11 @@ import java.io.*;
 public class RMIInputStream extends InputStream implements Serializable {
 
     RMIInputStreamInterf in;
-    
+
     public RMIInputStream(RMIInputStreamInterf in) {
         this.in = in;
     }
-    
+
     public int read() throws IOException {
         return in.read();
     }
@@ -20,9 +20,9 @@ public class RMIInputStream extends InputStream implements Serializable {
         System.arraycopy(b2, 0, b, off, i);
         return i;
     }
-    
+
     public void close() throws IOException {
         super.close();
     }
-    
+
 }
