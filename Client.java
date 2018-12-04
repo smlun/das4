@@ -64,10 +64,6 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
         bar.append("]   " + percent + "%     ");
         System.out.print("\r" + bar.toString());
     }
-    
-    public static void upload(FileInterface finterface, File src, File dest, long len) throws IOException {
-        copy (new FileInputStream(src), finterface.getOutputStream(dest), len);
-    }
 
     public static void download(FileInterface finterface, File src, File dest, long len) throws IOException {
         copy (finterface.getInputStream(src), new FileOutputStream(dest), len);
@@ -130,7 +126,6 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
                 if (chkExit == true) {
                     server.broadcastMessage(ClientIP);
                 }
-                // upload(server, new File("download.txt"), new File("upload.txt"));
             }
             catch (MalformedURLException murle) {
                 System.out.println("MalformedURLException");

@@ -33,10 +33,6 @@ public class Server extends UnicastRemoteObject implements ServerInterface, File
  
     public synchronized void sendMessageToClient(String message, String ip) throws RemoteException{}
 
-    public OutputStream getOutputStream(File f) throws IOException {
-        return new RMIOutputStream(new RMIOutputStreamImpl(new FileOutputStream(f)));
-    }
-
     public InputStream getInputStream(File f) throws IOException {
         return new RMIInputStream(new RMIInputStreamImpl(new FileInputStream(f)));
     }
