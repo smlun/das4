@@ -10,27 +10,27 @@ import java.io.File;
 public class Server extends UnicastRemoteObject implements ServerInterface, FileInterface {
     private static final long serialVersionUID = 1L;
     private ArrayList<ServerInterface> clientList;
- 
+
     protected Server() throws RemoteException {
         clientList = new ArrayList<ServerInterface>();
     }
 
     public synchronized boolean clientDetails(ServerInterface serverinterface, String clientip) throws RemoteException {
-        boolean chkLog = false;  
+        boolean chkLog = false;
         if (clientip != "") {
             chkLog = true;
             this.clientList.add(serverinterface);
-            System.out.println(clientip + " has registered!"); 
+            System.out.println(clientip + " has registered!");
         }
         return chkLog;
     }
- 
+
     public synchronized void broadcastMessage(String clientip) throws RemoteException {
         for(int i=0; i<clientList.size(); i++) {
             clientList.get(i).sendMessageToClient("\n" + clientip + " has completed downloading file", clientip);
         }
     }
- 
+
     public synchronized void sendMessageToClient(String message, String ip) throws RemoteException{}
 
     public InputStream getInputStream(File f) throws IOException {

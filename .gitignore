@@ -1,4 +1,6 @@
 # Compiled class file
 *.class
-download.mkv
+.DS_Store
+.DS_Store?
 test.mkv
+test.txt
