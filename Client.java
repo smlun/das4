@@ -66,7 +66,7 @@ public class Client extends UnicastRemoteObject implements ServerInterface, Runn
     }
 
     public static void download(FileInterface finterface, File src, File dest, long len) throws IOException {
-        copy (finterface.getInputStream(src), new FileOutputStream(dest), len);
+        copy(finterface.getInputStream(src), new FileOutputStream(dest), len);
     }
 
     public void sendMessageToClient(String message, String oip) throws RemoteException {
